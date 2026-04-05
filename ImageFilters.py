@@ -1,7 +1,7 @@
 # Lab 9 – Image Processing
-# Name:
-# Date:
-# Assignment:
+# Name:Gavin Grow
+# Date:4/5/26
+# Assignment:Image Filters
 
 from PIL import Image
 
@@ -12,7 +12,15 @@ def swapGreenBlue(img):
     pixels = img.load()
     width, height = img.size
 
-    # TODO: Loop through every pixel and swap green and blue values
+    for x in range(width):
+        for y in range(height):
+            pixel = pixels[x, y]
+            if len(pixel) == 4:
+                red, green, blue, alpha = pixel
+                pixels[x, y] = (red, blue, green, alpha)
+            else:
+                red, green, blue = pixel
+                pixels[x, y] = (red, blue, green)
 
     img.save("swapGB.png")
 
@@ -23,8 +31,21 @@ def darken(img, amount):
     pixels = img.load()
     width, height = img.size
 
-    # TODO: Loop through every pixel and reduce RGB values by amount
-    # Make sure values do not go below 0
+    for x in range(width):
+        for y in range(height):
+            pixel = pixels[x, y]
+            if len(pixel) == 4:
+                red, green, blue, alpha = pixel
+                red = max(red - amount, 0)
+                green = max(green - amount, 0)
+                blue = max(blue - amount, 0)
+                pixels[x, y] = (red, green, blue, alpha)
+            else:
+                red, green, blue = pixel
+                red = max(red - amount, 0)
+                green = max(green - amount, 0)
+                blue = max(blue - amount, 0)
+                pixels[x, y] = (red, green, blue)
 
     img.save("darkImg.png")
 
@@ -46,14 +67,16 @@ def bwFilter(img):
 
 def main():
     # Open the image file
-    myImg = Image.open("durango.png")
+    source = "durango.png"
+
+    # Generate swapGB.png from the original image
+    swapGreenBlue(Image.open(source))
+
+    # Generate darkImg.png from the original image
+    darken(Image.open(source), 80)
 
     # Example (already completed)
-    # bwFilter(myImg)
-
-    # Uncomment each function as you complete it
-    # swapGreenBlue(myImg)
-    # darken(myImg, 20)
+    # bwFilter(Image.open(source))
 
 
 if __name__ == "__main__":
